@@ -25,7 +25,7 @@ The project is a static site configured for Cloudflare Pages. Its production rou
 - `https://challenges.purutuladhar.com/cka/`
 - `https://challenges.purutuladhar.com/achievers/`
 
-Build command: none. Output directory: repository root (`.`).
+Build command: `npm run build`. Output directory: `dist`.
 
 ## Curriculum source
 
@@ -34,4 +34,3 @@ CKA Curriculum v1.35 from the official [CNCF curriculum repository](https://gith
 ## License
 
 Site code is available under the [MIT License](LICENSE). CNCF curriculum wording remains subject to its original CC BY 4.0 license.
-

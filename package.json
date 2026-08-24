@@ -4,8 +4,11 @@
   "private": true,
   "description": "A community CKA video and hands-on practice challenge.",
   "scripts": {
+    "build": "node scripts/build-site.mjs",
     "test": "node scripts/check-site.mjs"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^4.86.0"
+  }
 }
-

@@ -46,7 +46,7 @@ window.CKA_CHALLENGES = [
       { id: "rbac", title: "Manage role-based access control (RBAC)", videoId: "", practice: [] },
       { id: "infrastructure", title: "Prepare underlying infrastructure for installing a Kubernetes cluster", videoId: "", practice: [] },
       { id: "kubeadm", title: "Create and manage Kubernetes clusters using kubeadm", videoId: "", practice: [] },
-      { id: "cluster-lifecycle", title: "Manage the lifecycle of Kubernetes clusters", videoId: "", practice: [] },
+      { id: "cluster-lifecycle", title: "Manage the lifecycle of Kubernetes clusters", videoId: "YHe3Rgp7WP4", practice: [] },
       { id: "ha-control-plane", title: "Implement and configure a highly available control plane", videoId: "", practice: [] },
       { id: "helm-kustomize", title: "Use Helm and Kustomize to install cluster components", videoId: "", practice: [] },
       { id: "extension-interfaces", title: "Understand extension interfaces (CNI, CSI, CRI, and more)", videoId: "", practice: [] },
@@ -67,4 +67,3 @@ window.CKA_CHALLENGES = [
     ]
   }
 ];
-
