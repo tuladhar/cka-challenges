@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const output = resolve(root, "dist");
-const paths = ["cka", "achievers", "assets", "data", "404.html", "_headers", "_redirects"];
+const paths = ["index.html", "cka", "achievers", "assets", "data", "404.html", "_headers", "_redirects"];
 
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });

@@ -1,92 +1,111 @@
 const challenges = window.CKA_CHALLENGES || [];
-const storageKey = "cka-challenges-completed";
-const completed = new Set(JSON.parse(localStorage.getItem(storageKey) || "[]"));
+const progressKey = "cka-challenges-completed";
+const completed = new Set(JSON.parse(localStorage.getItem(progressKey) || "[]"));
+const allLessons = challenges.flatMap((domain) => domain.competencies.map((lesson) => ({ ...lesson, domain })));
 
 const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
 
-function renderPractice(practice) {
-  if (!practice.length) return '<p class="empty-links">Practice labs are being prepared. Add links in <code>assets/challenges.js</code>.</p>';
-  return practice.map((link) => `<a class="practice-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener"><span>${escapeHtml(link.label)}</span><span aria-hidden="true">↗</span></a>`).join("");
-}
-
-function renderVideo(item) {
-  if (!item.videoId) return `<div class="video-placeholder"><span class="play-mark" aria-hidden="true">▶</span><p><strong>Practical video coming soon</strong><br><span>Add a YouTube ID in <code>assets/challenges.js</code></span></p></div>`;
-  return `<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(item.videoId)}" title="${escapeHtml(item.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
-}
-
-function renderChallenges() {
+function renderCourse() {
+  const tabs = document.querySelector(".domain-tabs");
   const root = document.querySelector("#challenge-list");
-  if (!root) return;
+  if (!tabs || !root) return;
+
+  tabs.insertAdjacentHTML("beforeend", challenges.map((domain) => `<button type="button" data-filter="${domain.id}">${escapeHtml(domain.title)}</button>`).join(""));
   root.innerHTML = challenges.map((domain, domainIndex) => `
-    <section class="domain" id="${domain.id}" data-domain>
-      <header class="domain-header">
-        <div class="domain-number ${domain.color}">${String(domainIndex + 1).padStart(2, "0")}</div>
-        <div><p class="domain-kicker">Exam domain · ${domain.weight}%</p><h2>${escapeHtml(domain.title)}</h2></div>
-        <div class="domain-count"><strong data-domain-count>0/${domain.competencies.length}</strong><span>complete</span></div>
-      </header>
-      <div class="competency-list">
-        ${domain.competencies.map((item, itemIndex) => `
-          <article class="competency" id="${item.id}" data-id="${item.id}">
-            <button class="competency-toggle" type="button" aria-expanded="false" aria-controls="panel-${item.id}">
-              <span class="competency-index">${String(itemIndex + 1).padStart(2, "0")}</span>
-              <span class="competency-title">${escapeHtml(item.title)}</span>
-              <span class="toggle-icon" aria-hidden="true">+</span>
-            </button>
-            <div class="competency-panel" id="panel-${item.id}" hidden>
-              <div class="lesson-grid">
-                <div>${renderVideo(item)}</div>
-                <aside class="practice"><p class="mini-label">Hands-on practice</p><h3>Make it stick</h3><p>Recreate what you watched in a real cluster.</p><div class="practice-links">${renderPractice(item.practice)}</div></aside>
-              </div>
-              <label class="complete-control"><input type="checkbox" value="${item.id}" ${completed.has(item.id) ? "checked" : ""}><span class="custom-check" aria-hidden="true">✓</span><span>I watched and practiced this competency</span></label>
-            </div>
-          </article>`).join("")}
+    <section class="domain-group" data-domain="${domain.id}">
+      <header class="domain-title"><div><span>${String(domainIndex + 1).padStart(2, "0")}</span><div><p>${domain.weight}% of exam</p><h3>${escapeHtml(domain.title)}</h3></div></div><strong data-domain-count>0/${domain.competencies.length}</strong></header>
+      <div class="lesson-grid">
+        ${domain.competencies.map((lesson, lessonIndex) => `
+          <button class="lesson-card${completed.has(lesson.id) ? " completed" : ""}" type="button" data-lesson-id="${lesson.id}">
+            <span class="lesson-number">Lesson ${String(lessonIndex + 1).padStart(2, "0")}</span>
+            <strong>${escapeHtml(lesson.title)}</strong>
+            <span class="lesson-meta"><span>${lesson.videoId ? "Video available" : "Video coming soon"}</span><i aria-hidden="true">${completed.has(lesson.id) ? "✓" : "→"}</i></span>
+          </button>`).join("")}
       </div>
     </section>`).join("");
 }
 
+function videoMarkup(lesson) {
+  if (!lesson.videoId) return `<div class="video-placeholder"><span aria-hidden="true">▶</span><div><strong>Practical video coming soon</strong><p>This lesson slot is ready for its YouTube video.</p></div></div>`;
+  return `<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(lesson.videoId)}" title="${escapeHtml(lesson.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+}
+
+function practiceMarkup(lesson) {
+  if (!lesson.practice.length) return `<p class="practice-empty">Practice links are being prepared for this lesson.</p>`;
+  return lesson.practice.map((link) => `<a class="practice-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener"><span>${escapeHtml(link.label)}</span><span>↗</span></a>`).join("");
+}
+
+function openLesson(id) {
+  const lesson = allLessons.find((item) => item.id === id);
+  const dialog = document.querySelector("#lesson-dialog");
+  if (!lesson || !dialog) return;
+  dialog.dataset.lessonId = lesson.id;
+  dialog.querySelector("[data-lesson-domain]").textContent = `${lesson.domain.title} · ${lesson.domain.weight}%`;
+  dialog.querySelector("[data-lesson-title]").textContent = lesson.title;
+  dialog.querySelector("[data-lesson-video]").innerHTML = videoMarkup(lesson);
+  dialog.querySelector("[data-lesson-practice]").innerHTML = practiceMarkup(lesson);
+  dialog.querySelector("[data-lesson-complete]").checked = completed.has(lesson.id);
+  history.replaceState(null, "", `#${lesson.id}`);
+  dialog.showModal();
+}
+
+function closeLesson() {
+  const dialog = document.querySelector("#lesson-dialog");
+  dialog?.close();
+  if (allLessons.some((lesson) => `#${lesson.id}` === location.hash)) history.replaceState(null, "", location.pathname);
+}
+
 function updateProgress() {
-  const total = challenges.reduce((sum, domain) => sum + domain.competencies.length, 0);
-  const count = completed.size;
-  const percent = total ? Math.round((count / total) * 100) : 0;
-  document.querySelectorAll("[data-progress-text]").forEach((el) => { el.textContent = `${count} / ${total}`; });
-  document.querySelectorAll("[data-progress-percent]").forEach((el) => { el.textContent = `${percent}%`; });
+  const total = allLessons.length;
+  const percent = total ? Math.round((completed.size / total) * 100) : 0;
+  document.querySelectorAll("[data-progress-text]").forEach((el) => { el.textContent = `${completed.size} / ${total}`; });
+  document.querySelectorAll("[data-progress-percent]").forEach((el) => { el.textContent = `${percent}% complete`; });
   document.querySelectorAll("[data-progress-bar]").forEach((el) => { el.style.width = `${percent}%`; });
-  document.querySelectorAll("[data-domain]").forEach((domainEl) => {
-    const ids = [...domainEl.querySelectorAll("input[type=checkbox]")].map((input) => input.value);
-    const domainCount = ids.filter((id) => completed.has(id)).length;
-    domainEl.querySelector("[data-domain-count]").textContent = `${domainCount}/${ids.length}`;
+  challenges.forEach((domain) => {
+    const section = document.querySelector(`[data-domain="${domain.id}"]`);
+    if (!section) return;
+    const count = domain.competencies.filter((lesson) => completed.has(lesson.id)).length;
+    section.querySelector("[data-domain-count]").textContent = `${count}/${domain.competencies.length}`;
   });
 }
 
-function setupInteractions() {
+function setupCourseInteractions() {
+  const lessonDialog = document.querySelector("#lesson-dialog");
   document.addEventListener("click", (event) => {
-    const button = event.target.closest(".competency-toggle");
-    if (!button) return;
-    const panel = document.getElementById(button.getAttribute("aria-controls"));
-    const open = button.getAttribute("aria-expanded") === "true";
-    button.setAttribute("aria-expanded", String(!open));
-    panel.hidden = open;
+    const lessonCard = event.target.closest("[data-lesson-id]");
+    if (lessonCard) openLesson(lessonCard.dataset.lessonId);
+    if (event.target.closest("[data-close-lesson]")) closeLesson();
+    const filter = event.target.closest("[data-filter]");
+    if (filter) {
+      document.querySelectorAll("[data-filter]").forEach((button) => button.classList.toggle("active", button === filter));
+      document.querySelectorAll(".domain-group").forEach((section) => { section.hidden = filter.dataset.filter !== "all" && section.dataset.domain !== filter.dataset.filter; });
+    }
   });
-  document.addEventListener("change", (event) => {
-    if (!event.target.matches(".complete-control input")) return;
-    event.target.checked ? completed.add(event.target.value) : completed.delete(event.target.value);
-    localStorage.setItem(storageKey, JSON.stringify([...completed]));
+  lessonDialog?.addEventListener("click", (event) => { if (event.target === lessonDialog) closeLesson(); });
+  lessonDialog?.querySelector("[data-lesson-complete]").addEventListener("change", (event) => {
+    const id = lessonDialog.dataset.lessonId;
+    event.target.checked ? completed.add(id) : completed.delete(id);
+    localStorage.setItem(progressKey, JSON.stringify([...completed]));
+    const card = document.querySelector(`[data-lesson-id="${id}"]`);
+    card.classList.toggle("completed", event.target.checked);
+    card.querySelector(".lesson-meta i").textContent = event.target.checked ? "✓" : "→";
     updateProgress();
   });
 }
 
 function setupNewsletter() {
   const dialog = document.querySelector("#newsletter-dialog");
-  if (!dialog || localStorage.getItem("cka-newsletter-seen")) return;
+  if (!dialog || localStorage.getItem("cka-newsletter-seen") || allLessons.some((lesson) => `#${lesson.id}` === location.hash)) return;
   const close = () => { dialog.close(); localStorage.setItem("cka-newsletter-seen", "true"); };
-  setTimeout(() => dialog.showModal(), 900);
+  setTimeout(() => dialog.showModal(), 1200);
   dialog.querySelectorAll("[data-close-dialog]").forEach((button) => button.addEventListener("click", close));
   dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });
-  dialog.querySelector("form").addEventListener("submit", (event) => { event.preventDefault(); dialog.querySelector(".form-note").textContent = "Thanks — the newsletter connection will be available soon."; setTimeout(close, 1800); });
+  dialog.querySelector("form").addEventListener("submit", (event) => { event.preventDefault(); dialog.querySelector(".form-note").textContent = "Thanks — newsletter signup will be connected soon."; setTimeout(close, 1600); });
 }
 
-renderChallenges();
-setupInteractions();
+renderCourse();
+setupCourseInteractions();
 updateProgress();
+const initialLesson = allLessons.find((lesson) => `#${lesson.id}` === location.hash);
+if (initialLesson) openLesson(initialLesson.id);
 setupNewsletter();
-

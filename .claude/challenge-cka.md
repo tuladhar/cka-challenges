@@ -6,6 +6,7 @@ The CKA challenge helps people prepare across every official Certified Kubernete
 
 ## Routes and source files
 
+- `/` → `index.html` course catalog
 - `/cka/` → `cka/index.html`
 - `/achievers/` → `achievers/index.html`
 - CKA curriculum and media links → `assets/challenges.js`
@@ -59,7 +60,6 @@ Achievers open a pull request that adds one record to `data/achievers.json`. Eac
 ## Design constraints
 
 - Keep the site light; do not introduce a dark theme.
-- Retain strong whitespace, readable typography, restrained Kubernetes green accents, and colorful domain markers.
-- Maintain keyboard-accessible accordions, semantic headings, visible focus behavior, reduced-motion support, responsive layout, and privacy-enhanced embedded videos.
+- Follow the restrained hands-on lab catalog pattern: black utility navigation, square course tiles, a navy course overview, pale course body, compact filters, and rectangular lesson cards. Avoid oversized editorial typography, gradients outside the course hero, excessive rounded cards, decorative orbs, and generic AI-landing-page treatments.
+- Maintain keyboard-accessible lesson dialogs, semantic headings, visible focus behavior, reduced-motion support, responsive layout, shareable lesson hashes, and privacy-enhanced embedded videos.
 - Keep the challenge data-driven so a new certification can reuse the same experience.
-

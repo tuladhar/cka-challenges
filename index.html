@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Free, practical certification challenges for Kubernetes administrators.">
+  <meta name="theme-color" content="#050505">
+  <title>Challenges by Puru Tuladhar</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Challenges home"><span>CHALLENGE</span><span>LABS</span></a>
+    <nav aria-label="Main navigation"><a class="active" href="/">Courses</a><a href="/achievers/">Achievers</a><a href="https://github.com/tuladhar/cka-challenges" target="_blank" rel="noopener">GitHub</a></nav>
+  </header>
+
+  <main class="catalog-page">
+    <div class="catalog-search"><label for="course-search">Find a course</label><input id="course-search" type="search" placeholder="Search…" autocomplete="off"></div>
+    <section class="catalog-grid" aria-label="Learning areas">
+      <a class="catalog-card catalog-card-dark" href="/cka/#how-it-works"><div><h2>How it works</h2><p>Watch focused lessons and reinforce them in a real cluster.</p></div><span>Learn more →</span></a>
+      <a class="catalog-card catalog-card-dark" href="/achievers/"><div><h2>Achievers</h2><p>Meet community members who practiced, passed, and verified their CKA.</p></div><span>View the wall →</span></a>
+      <a class="catalog-card course-tile" href="/cka/" data-course-name="cka certified kubernetes administrator">
+        <div class="course-emblem" aria-hidden="true"><span class="helm">⎈</span><b>CKA</b></div>
+        <div><h2>CKA Certification</h2><p>27 free practical lessons</p></div>
+      </a>
+    </section>
+    <p class="catalog-empty" hidden>No courses match that search.</p>
+  </main>
+
+  <footer class="simple-footer"><span>© 2026 Puru Tuladhar</span><span>Free and community-maintained</span></footer>
+  <script>
+    const search = document.querySelector('#course-search');
+    const course = document.querySelector('[data-course-name]');
+    const empty = document.querySelector('.catalog-empty');
+    search.addEventListener('input', () => {
+      const visible = course.dataset.courseName.includes(search.value.trim().toLowerCase());
+      course.hidden = !visible;
+      empty.hidden = visible;
+    });
+  </script>
+</body>
+</html>

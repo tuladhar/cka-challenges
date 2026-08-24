@@ -2,7 +2,7 @@ import { readFile, access } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const required = ["cka/index.html", "achievers/index.html", "assets/styles.css", "assets/challenges.js", "data/achievers.json", "CLAUDE.md", ".claude/challenge-cka.md"];
+const required = ["index.html", "cka/index.html", "achievers/index.html", "assets/styles.css", "assets/challenges.js", "data/achievers.json", "CLAUDE.md", ".claude/challenge-cka.md"];
 await Promise.all(required.map((file) => access(resolve(root, file))));
 
 const challengeSource = await readFile(resolve(root, "assets/challenges.js"), "utf8");
@@ -20,4 +20,3 @@ for (const person of achievers) {
 }
 
 console.log("Site checks passed: 5 domains, 27 competencies, and valid achiever data.");
-
