@@ -1,0 +1,46 @@
+name: CKA achiever submission help
+description: Ask for help adding your verified CKA credential to the achievers wall.
+title: "[Achiever]: "
+labels: ["achiever"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Congratulations! The normal submission path is a pull request following `CONTRIBUTING.md`. Use this form if you need help with that process. Never include a private credential URL.
+  - type: input
+    id: name
+    attributes:
+      label: Full name
+      placeholder: Your name as shown on Credly
+    validations:
+      required: true
+  - type: dropdown
+    id: challenge
+    attributes:
+      label: Challenge completed
+      options:
+        - CKA
+    validations:
+      required: true
+  - type: input
+    id: achieved
+    attributes:
+      label: Achievement month
+      placeholder: August 2026
+    validations:
+      required: true
+  - type: input
+    id: credly
+    attributes:
+      label: Public Credly credential
+      placeholder: https://www.credly.com/badges/...
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirmation
+      options:
+        - label: I am submitting my own credential and agree to have my name and credential displayed publicly.
+          required: true
+

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Watch, practice and complete every domain of the Certified Kubernetes Administrator exam curriculum.">
+  <meta name="theme-color" content="#f7f8f4">
+  <title>CKA Certification Challenges</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/cka/" aria-label="CKA Challenges home"><span class="brand-mark">K</span><span>CKA Challenges</span></a>
+    <nav aria-label="Main navigation"><a class="active" href="/cka/">Challenge</a><a href="/achievers/">Achievers</a><a href="https://github.com/tuladhar/cka-challenges" target="_blank" rel="noopener">GitHub ↗</a></nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Community learning challenge</p>
+        <h1>CKA certification<br><em>challenges.</em></h1>
+        <p class="lede">One practical path through every CKA domain. Watch the lesson, practice in a real cluster, and track your progress toward exam day.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#curriculum">Start the challenge <span>↓</span></a><a class="text-link" href="/achievers/">Meet the achievers <span>↗</span></a></div>
+      </div>
+      <aside class="progress-card" aria-label="Challenge progress">
+        <div class="progress-top"><div><p class="mini-label">Your progress</p><strong data-progress-percent>0%</strong></div><div class="orbit" aria-hidden="true"><span></span><span></span><span></span></div></div>
+        <div class="progress-track"><span data-progress-bar></span></div>
+        <div class="progress-bottom"><span><strong data-progress-text>0 / 27</strong> competencies</span><span>Saved on this device</span></div>
+      </aside>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-heading">
+      <div><p class="eyebrow">The practice loop</p><h2 id="how-heading">Learn by doing,<br>not by collecting tabs.</h2></div>
+      <ol>
+        <li><span>01</span><div><h3>Watch</h3><p>Follow a focused, hands-on lesson for one exam competency.</p></div></li>
+        <li><span>02</span><div><h3>Practice</h3><p>Open a linked lab and reproduce the task in a live cluster.</p></div></li>
+        <li><span>03</span><div><h3>Achieve</h3><p>Pass the CKA, verify your credential, and join the community wall.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="curriculum" id="curriculum">
+      <div class="section-intro"><div><p class="eyebrow">CKA curriculum · v1.35</p><h2>Five domains.<br>Twenty-seven competencies.</h2></div><p>Open each competency, watch the practical video, then complete a lab. Your checkmarks stay in this browser.</p></div>
+      <div id="challenge-list"></div>
+    </section>
+
+    <section class="finish-banner">
+      <div><p class="eyebrow light">Passed your exam?</p><h2>You did the work.<br>Make it visible.</h2></div>
+      <div><p>Add your verified Credly credential to the community achievers page with a simple GitHub contribution.</p><a class="button button-light" href="https://github.com/tuladhar/cka-challenges/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Join the achievers <span>↗</span></a></div>
+    </section>
+  </main>
+
+  <footer><a class="brand" href="/cka/"><span class="brand-mark">K</span><span>CKA Challenges</span></a><p>Built for the Kubernetes community by <a href="https://purutuladhar.com">Puru Tuladhar</a>.</p><a href="#top">Back to top ↑</a></footer>
+
+  <dialog id="newsletter-dialog" class="newsletter-dialog" aria-labelledby="newsletter-title">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="Close">×</button>
+    <div class="mail-art" aria-hidden="true"><span>kubectl</span><span>get ready</span></div>
+    <div class="dialog-copy"><p class="eyebrow">Stay in the loop</p><h2 id="newsletter-title">Practical Kubernetes,<br>straight to your inbox.</h2><p>Get new challenge videos, labs, and exam-day lessons. No noise.</p><form><label for="newsletter-email">Email address</label><div class="email-row"><input id="newsletter-email" type="email" placeholder="you@example.com" required><button type="submit">Subscribe</button></div><p class="form-note">Newsletter integration placeholder — coming soon.</p></form><button class="skip-button" type="button" data-close-dialog>Maybe later</button></div>
+  </dialog>
+
+  <script src="/assets/challenges.js"></script>
+  <script src="/assets/site.js"></script>
+</body>
+</html>
+
